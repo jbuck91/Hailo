@@ -36,7 +36,7 @@ import supybot.callbacks as callbacks
 import supybot.ircmsgs as ircmsgs
 import supybot.ircdb as ircdb
 import subprocess
-import random
+from random import *
 try:
 	from supybot.i18n import PluginInternationalization
 	_ = PluginInternationalization('Hailo')
@@ -101,7 +101,7 @@ class Hailo(callbacks.Plugin):
 					if m != None and len(m):
 						irc.queueMsg(ircmsgs.privmsg(channel,m))
 					called = True
-				if not msg.addressed and replyRandom and random.random() > self.registryValue('replyPercent',channel=channel):
+				if not msg.addressed and replyRandom and randint(1,99) < self.registryValue('replyPercent',channel=channel)*100:
 					m = None
 					if learn:
 						m = self.callHailo(channel,'-L',text)
