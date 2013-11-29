@@ -66,15 +66,25 @@ class Hailo(callbacks.Plugin):
 			args.append('-b')
 			args.append(self.registryValue('hailoBrain',channel=channel))
 			args.append(arg)
-			args.append(text)
+			if len(text):
+				args.append(text)
 			(msg, err) = subprocess.Popen(args,stdout=subprocess.PIPE, stderr=subprocess.PIPE).communicate()
 			if err:
 				self.log.debug(err)
 			if msg != None:
-				msg = msg.replace('\n','')
+				msg = msg.replace('\n',' ')
 		except subprocess.CalledProcessError:
 			msg = None
 		return msg
+
+        def brainstats (self,irc,msg,args,channel):
+		"""[<channel>]
+
+		return brain stats"""
+                m = self.callHailo(channel,'-s','')
+                if m != None:
+                	irc.reply(m)
+	brainstats = wrap(brainstats,['op'])
 
 	def doPrivmsg (self,irc,msg):
 		(targets, t) = msg.args
