@@ -109,7 +109,15 @@ class Hailo(callbacks.Plugin):
 					else:
 						m = self.callHailo(channel,'-r',text)
 					if m != None and len(m):
-						irc.queueMsg(ircmsgs.privmsg(channel,m))
+						if self.registryValue('checkSimilarity',channel=channel):
+							if similar(m,text) < self.registryValue('similarity',channel=channel):
+								irc.queueMsg(ircmsgs.privmsg(channel,m))
+							else:
+								m = self.callHailo(channel,'-R')
+								if m != None and len(m):
+									irc.queueMsg(ircmsgs.privmsg(channel,m))
+						else:
+							irc.queueMsg(ircmsgs.privmsg(channel,m))
 					called = True
 				if not msg.addressed and replyRandom and randint(1,99) < self.registryValue('replyPercent',channel=channel)*100:
 					m = None
