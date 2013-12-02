@@ -113,7 +113,7 @@ class Hailo(callbacks.Plugin):
 							if similar(m,text) < self.registryValue('similarity',channel=channel):
 								irc.queueMsg(ircmsgs.privmsg(channel,m))
 							else:
-								m = self.callHailo(channel,'-R')
+								m = self.callHailo(channel,'-R','')
 								if m != None and len(m):
 									irc.queueMsg(ircmsgs.privmsg(channel,m))
 						else:
